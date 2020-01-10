@@ -1,5 +1,5 @@
 /*
- * libusbx synchronization using POSIX Threads
+ * libusb synchronization using POSIX Threads
  *
  * Copyright © 2011 Vitali Lovich <vlovich@aliph.com>
  * Copyright © 2011 Peter Stuge <peter@stuge.se>
@@ -19,10 +19,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include <config.h>
+
 #if defined(__linux__) || defined(__OpenBSD__)
-# if defined(__linux__)
-#  define _GNU_SOURCE
-# else
+# if defined(__OpenBSD__)
 #  define _BSD_SOURCE
 # endif
 # include <unistd.h>
@@ -63,7 +63,9 @@ finish:
 int usbi_get_tid(void)
 {
 	int ret = -1;
-#if defined(__linux__)
+#if defined(__ANDROID__)
+	ret = gettid();
+#elif defined(__linux__)
 	ret = syscall(SYS_gettid);
 #elif defined(__OpenBSD__)
 	/* The following only works with OpenBSD > 5.1 as it requires

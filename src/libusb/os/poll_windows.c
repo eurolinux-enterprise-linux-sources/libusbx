@@ -22,7 +22,7 @@
  */
 
 /*
- * poll() and pipe() Windows compatibility layer for libusbx 1.0
+ * poll() and pipe() Windows compatibility layer for libusb 1.0
  *
  * The way this layer works is by using OVERLAPPED with async I/O transfers, as
  * OVERLAPPED have an associated event which is flagged for I/O completion.
@@ -40,6 +40,8 @@
  * with a fake pipe. The read/write functions are only meant to be used in that
  * context.
  */
+#include <config.h>
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -252,7 +254,7 @@ void exit_polling(void)
 
 /*
  * Create a fake pipe.
- * As libusbx only uses pipes for signaling, all we need from a pipe is an
+ * As libusb only uses pipes for signaling, all we need from a pipe is an
  * event. To that extent, we create a single wfd and overlapped as a means
  * to access that event.
  */
@@ -331,7 +333,7 @@ struct winfd usbi_create_fd(HANDLE handle, int access_mode, struct usbi_transfer
 	wfd.cancel_fn = cancel_fn;
 
 	if ((access_mode != RW_READ) && (access_mode != RW_WRITE)) {
-		usbi_warn(NULL, "only one of RW_READ or RW_WRITE are supported.\n"
+		usbi_warn(NULL, "only one of RW_READ or RW_WRITE are supported. "
 			"If you want to poll for R/W simultaneously, create multiple fds from the same handle.");
 		return INVALID_WINFD;
 	}
@@ -428,7 +430,7 @@ struct winfd fd_to_winfd(int fd)
 
 	CHECK_INIT_POLLING;
 
-	if (fd <= 0)
+	if (fd < 0)
 		return INVALID_WINFD;
 
 	for (i=0; i<MAX_FDS; i++) {

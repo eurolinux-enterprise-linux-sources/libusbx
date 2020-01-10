@@ -1,13 +1,16 @@
 Summary:        Library for accessing USB devices
 Name:           libusbx
-Version:        1.0.15
-Release:        4%{?dist}
-Source0:        http://downloads.sourceforge.net/libusbx/libusbx-%{version}.tar.bz2
-Patch1:         0001-linux_usbfs-Work-around-a-driver-binding-race-in-res.patch
+Version:        1.0.20
+Release:        1%{?dist}
+Source0:        http://downloads.sourceforge.net/libusb/libusb-%{version}.tar.bz2
+# A couple of fixes from upstream
+Patch1:         0001-core-Store-different-event-types-as-a-bitmask-within.patch
+Patch2:         0002-API-Add-libusb_interrupt_event_handler-function.patch
+Patch3:         0003-core-Refactor-code-related-to-transfer-flags-and-tim.patch
 License:        LGPLv2+
 Group:          System Environment/Libraries
-URL:            http://sourceforge.net/apps/mediawiki/libusbx/
-BuildRequires:  doxygen
+URL:            http://libusb.info/
+BuildRequires:  systemd-devel doxygen
 Provides:       libusb1 = %{version}-%{release}
 Obsoletes:      libusb1 <= 1.0.9
 
@@ -47,13 +50,16 @@ This package contains API documentation for %{name}.
 
 
 %prep
-%setup -q
+%setup -q -n libusb-%{version}
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 
 %build
 %configure --disable-static --enable-examples-build
-make %{?_smp_mflags}
+# Parallel builds seem to be broken
+make
 pushd doc
 make docs
 popd
@@ -82,6 +88,11 @@ rm $RPM_BUILD_ROOT%{_libdir}/*.la
 
 
 %changelog
+* Wed Jun  8 2016 Hans de Goede <hdegoede@redhat.com> - 1.0.20-1
+- Upgrade to 1.0.20
+- Resolves: rhbz#1033092
+- Resolves: rhbz#1115797
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.0.15-4
 - Mass rebuild 2014-01-24
 
