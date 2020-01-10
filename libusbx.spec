@@ -1,7 +1,7 @@
 Summary:        Library for accessing USB devices
 Name:           libusbx
 Version:        1.0.15
-Release:        2%{?dist}
+Release:        4%{?dist}
 Source0:        http://downloads.sourceforge.net/libusbx/libusbx-%{version}.tar.bz2
 Patch1:         0001-linux_usbfs-Work-around-a-driver-binding-race-in-res.patch
 License:        LGPLv2+
@@ -82,6 +82,12 @@ rm $RPM_BUILD_ROOT%{_libdir}/*.la
 
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.0.15-4
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.0.15-3
+- Mass rebuild 2013-12-27
+
 * Fri Apr 19 2013 Hans de Goede <hdegoede@redhat.com> - 1.0.15-2
 - Replace tarbal with upstream re-spun tarbal which fixes line-ending and
   permission issues
