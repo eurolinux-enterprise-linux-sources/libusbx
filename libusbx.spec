@@ -1,12 +1,9 @@
 Summary:        Library for accessing USB devices
 Name:           libusbx
-Version:        1.0.20
+Version:        1.0.21
 Release:        1%{?dist}
 Source0:        http://downloads.sourceforge.net/libusb/libusb-%{version}.tar.bz2
 # A couple of fixes from upstream
-Patch1:         0001-core-Store-different-event-types-as-a-bitmask-within.patch
-Patch2:         0002-API-Add-libusb_interrupt_event_handler-function.patch
-Patch3:         0003-core-Refactor-code-related-to-transfer-flags-and-tim.patch
 License:        LGPLv2+
 Group:          System Environment/Libraries
 URL:            http://libusb.info/
@@ -51,10 +48,6 @@ This package contains API documentation for %{name}.
 
 %prep
 %setup -q -n libusb-%{version}
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-
 
 %build
 %configure --disable-static --enable-examples-build
@@ -88,6 +81,10 @@ rm $RPM_BUILD_ROOT%{_libdir}/*.la
 
 
 %changelog
+* Thu Sep 21 2017 Victor Toso <victortoso@redhat.com> - 1.0.21-1
+- Upgrade to 1.0.21
+- Resolves: rhbz#1399752
+
 * Wed Jun  8 2016 Hans de Goede <hdegoede@redhat.com> - 1.0.20-1
 - Upgrade to 1.0.20
 - Resolves: rhbz#1033092
